@@ -12,16 +12,16 @@ class ModelMixin(ModelMixinBase):
 
 class PluginMixin(object):
 
-	nullable = [] # nullable columns of the model
+    nullable = [] # nullable columns of the model
 
     def __init__(self, *args, **kwargs):
         super(PluginMixin, self).__init__(*args, **kwargs)
         self.ready = [] # rows to insert
 
     def fill(self, session):
-    	for item in session.filter(sa.or_(column == None
-    									  for column in self.nullable)):
-    		self.queue.enqueue(item)
+        for item in session.filter(sa.or_(column == None
+                                          for column in self.nullable)):
+            self.queue.enqueue(item)
 
     def update(self, session):
         session.add_all(self.ready)
