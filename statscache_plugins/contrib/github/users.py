@@ -33,10 +33,11 @@ class Plugin(PluginMixin, statscache.plugins.BasePlugin):
 
     def __init__(self, *args, **kwargs):
         super(Plugin, self).__init__(self, *args, **kwargs)
-        self.cache = set() # FIXME: set *some* limit, enact LRU caching
+        self.cache = set() # FIXME: set *some* limit and employ LRU eviction
 
     class Model(ModelMixinBase, statscache.plugins.BaseModel):
         __tablename__ = 'contrib_github_users'
+        identity = sa.Column(sa.UnicodeText, nullable=True, index=True)
 
     model = Model
 
@@ -49,7 +50,7 @@ class Plugin(PluginMixin, statscache.plugins.BasePlugin):
         if key not in self.cache:
             self.cache.add(key)
             timestamp = datetime.datetime.fromtimestamp(message['timestamp'])
-            self.ready.append(Plugin.Model(
+            self.ready.append(self.model(
                 timestamp=timestamp,
                 username=username,
                 identity=identity

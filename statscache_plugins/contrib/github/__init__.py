@@ -1,13 +1,11 @@
 import sqlalchemy as sa
 
 class ModelMixinBase(object):
-        identity = sa.Column(sa.UnicodeText, nullable=True, index=True)
         username = sa.Column(sa.UnicodeText, nullable=False, index=True)
 
 
 class ModelMixin(ModelMixinBase):
         repository = sa.Column(sa.UnicodeText, nullable=False, index=True)
-        link = sa.Column(sa.UnicodeText, nullable=False)
 
 
 class PluginMixin(object):
